@@ -9,6 +9,12 @@
 #define GAUCHE 1
 #define IMG_PATH "data/rond.png"
 
+#ifdef MAINFILE
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
 typedef struct Snake
 {
     SDL_Texture *img;
@@ -16,6 +22,18 @@ typedef struct Snake
     struct Snake *suivant;
 
 } Snake;
+
+EXTERN SDL_Window *win;
+EXTERN SDL_Renderer *renderer;
+EXTERN SDL_Texture *img;
+EXTERN int w, h; /* texture width & height */
+EXTERN SDL_Rect texr;
+EXTERN int direction;
+EXTERN int c;
+EXTERN int vitesse;
+EXTERN int continuer;
+EXTERN Snake *snake;
+
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
 void afficherSerpent(SDL_Renderer *renderer, Snake *snake);

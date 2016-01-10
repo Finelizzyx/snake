@@ -334,3 +334,18 @@
 
 1452377074 d:\git\snake\snake.h
 
+1452424718 source:i:\dev\git\snake\snake.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<SDL.h>
+	<SDL_image.h>
+	"snake.h"
+
+1452425560 i:\dev\git\snake\snake.h
+
+1452425160 source:i:\dev\git\snake\affiche.c
+	<SDL.h>
+	<SDL_image.h>
+	"snake.h"
+

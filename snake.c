@@ -4,21 +4,20 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#define MAINFILE
+
 #include "snake.h"
 
 int main (int argc, char *argv[]) {
 
 	/* variable declarations */
-	SDL_Window *win = NULL;
-	SDL_Renderer *renderer = NULL;
-	SDL_Texture *img = NULL;
-	int w, h; /* texture width & height */
-	SDL_Rect texr;
-	int direction;
-	int c = 0;
-	int vitesse = 1000;
-	int continuer = 1;
-	Snake *snake = NULL;
+	win = NULL;
+	renderer = NULL;
+	img = NULL;
+	c = 0;
+	vitesse = 1000;
+	continuer = 1;
+	snake = NULL;
 
 
     srand(time(NULL));
@@ -47,10 +46,7 @@ int main (int argc, char *argv[]) {
     snake = (Snake*)malloc(sizeof(Snake));
 
     snake->img = img;
-    snake->r->x = texr.x;
-    snake->r->y = texr.y;
-    snake->r->w = texr.w;
-    snake->r->h = texr.h;
+    snake->r = &texr;
     snake->suivant = NULL;
 
 	while (continuer) {
@@ -118,22 +114,4 @@ int main (int argc, char *argv[]) {
 	SDL_DestroyWindow(win);
     free(snake);
 	return 0;
-}
-
-void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r)
-{
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, img, NULL, r);
-    SDL_RenderPresent(renderer);
-}
-
-void afficherSerpent(SDL_Renderer *renderer, Snake *snake)
-{
-    Snake *snakeTemp = snake;
-
-    while(snakeTemp != NULL)
-    {
-        afficherImage(renderer, snakeTemp->img, snakeTemp->r);
-        snakeTemp = snakeTemp->suivant;
-    }
 }
