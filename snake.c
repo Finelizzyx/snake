@@ -10,6 +10,9 @@
 
 int main (int argc, char *argv[]) {
 
+    Point *pt;
+    Point *ptsuivant;
+
 	/* variable declarations */
 	win = NULL;
 	renderer = NULL;
@@ -18,7 +21,6 @@ int main (int argc, char *argv[]) {
 	vitesse = 1000;
 	continuer = 1;
 	snake = NULL;
-
 
     srand(time(NULL));
 
@@ -32,7 +34,7 @@ int main (int argc, char *argv[]) {
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
 	/* load our image */
-	img = IMG_LoadTexture(renderer, IMG_PATH);
+	img = IMG_LoadTexture(renderer, IMG_ROND_PATH);
 	SDL_QueryTexture(img, NULL, NULL, &w, &h); /* get the width and height of the texture */
 	/* put the location where we want the texture to be drawn into a rectangle
      I'm also scaling the texture 2x simply by setting the width and height */
@@ -48,6 +50,8 @@ int main (int argc, char *argv[]) {
     snake->img = img;
     snake->r = &texr;
     snake->suivant = NULL;
+
+    points = AfficherPoints(renderer, NIVEAU1_PATH);
 
 	while (continuer) {
 
@@ -113,5 +117,15 @@ int main (int argc, char *argv[]) {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
     free(snake);
+
+    pt = points->premier;
+    while(pt != NULL) {
+        ptsuivant = pt->suivant;
+        SDL_DestroyTexture(pt->img);
+        free(pt);
+        pt = ptsuivant;
+    }
+    free(points);
+
 	return 0;
 }
