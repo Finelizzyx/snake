@@ -58,6 +58,9 @@
 			<Add directory="C:/Program Files (x86)/CodeBlocks/SDL2_mixer-2.0.1/i686-w64-mingw32/lib" />
 			<Add directory="C:/Program Files (x86)/CodeBlocks/SDL2_ttf-2.0.13/i686-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="Affiche.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="snake.c">
 			<Option compilerVar="CC" />
 		</Unit>
