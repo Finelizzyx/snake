@@ -23,7 +23,7 @@
 typedef struct Snake
 {
     SDL_Texture *img;
-    SDL_Rect r;
+    SDL_Rect *r;
     struct Snake *suivant;
 
 } Snake;
@@ -53,7 +53,7 @@ EXTERN SDL_Renderer *renderer;
 EXTERN SDL_Texture *img;
 EXTERN int direction;
 EXTERN int c;
-EXTERN int vitesse;
+EXTERN long vitesse;
 EXTERN int continuer;
 EXTERN Snakehead *snake;
 EXTERN Points *points;
@@ -67,6 +67,8 @@ Snakehead *initSerpent(SDL_Renderer *ecran);
 void Serpent(Snakehead *snake, int dir);
 void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran);
 void libererSerpent(Snakehead *snake);
+
+int collisionPoint(Snakehead *s, Points *p);
 
 void snakeERROR(const char *erreur);
 

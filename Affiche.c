@@ -12,7 +12,6 @@ Fonctions d'affichage du serpent
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r)
 {
-    SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, img, NULL, r);
     SDL_RenderPresent(renderer);
 }
@@ -23,10 +22,7 @@ void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake)
 
     while(snakeTemp != NULL) /* Affichage du corps */
     {
-        /*afficherImage(renderer, snakeTemp->img, &snakeTemp->r);*/
-        SDL_RenderClear(renderer);
-        if(SDL_RenderCopy(renderer, snakeTemp->img, NULL, &snakeTemp->r) < 0) { snakeERROR(SDL_GetError()); }
-        SDL_RenderPresent(renderer);
+        afficherImage(renderer, snakeTemp->img, snakeTemp->r);
         snakeTemp = snakeTemp->suivant;
     }
 }
@@ -36,10 +32,11 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
     FILE *f;
     Points *pts;
     Point *p = NULL;
-    Point *pre = NULL; /* Point précédent pour lagestion du suivant */
+    Point *pre = NULL; /* Point précédent pour la gestion du suivant */
     SDL_Rect *rect;
     int x, y;
     int c = 0; /* Nombre d'éléments */
+    char cerreur[128];
 
     pts = (Points*)malloc(sizeof(Points));
     pts->premier = NULL;
@@ -49,16 +46,18 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
         while((fscanf(f, "%d,%d", &x, &y)) != EOF)
         {
             p = (Point*)malloc(sizeof(Point));
-            p->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
             rect = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-            rect->x = x * 25;
-            rect->y = y * 25;
-            /*rect->h = h;
-            rect->w = w;*/
+            p->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
+            SDL_QueryTexture(p->img, NULL, NULL, &rect->w, &rect->h);
+            rect->x = x * rect->w;
+            rect->y = y * rect->h;
             p->r = rect;
             p->suivant = NULL;
             afficherImage(renderer, p->img, p->r);
-            if(pts->premier == NULL) { pts->premier = p; }
+            if(pts->premier == NULL) {
+                pts->premier = p;
+                pre = p;
+            }
             else {
                 if(pre != NULL) {
                     pre->suivant = p;
@@ -67,6 +66,11 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
             }
             c++;
         }
+    }
+    else
+    {
+        sprintf(cerreur, "Impossible d'ouvrir le fichier %s !", chemin);
+        snakeERROR(cerreur);
     }
     fclose(f);
 

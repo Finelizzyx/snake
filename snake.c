@@ -18,7 +18,7 @@ int main (int argc, char *argv[]) {
 	renderer = NULL;
 	img = NULL;
 	c = 0;
-	vitesse = 1000;
+	vitesse = 10000000;
 	continuer = 1;
 	snake = NULL;
 
@@ -75,11 +75,10 @@ int main (int argc, char *argv[]) {
 
 		}
 
-        afficherSerpent(renderer, snake);
-
         if(c == vitesse)
         {
             Serpent(snake, direction);
+            afficherSerpent(renderer, snake);
             c = 0;
         }
         else c++;
