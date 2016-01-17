@@ -61,6 +61,12 @@
 		<Unit filename="Affiche.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Serpent.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fonctions.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="snake.c">
 			<Option compilerVar="CC" />
 		</Unit>
