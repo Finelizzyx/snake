@@ -12,6 +12,7 @@ Fonctions d'affichage du serpent
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r)
 {
+    SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, img, NULL, r);
     SDL_RenderPresent(renderer);
 }
@@ -22,7 +23,10 @@ void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake)
 
     while(snakeTemp != NULL) /* Affichage du corps */
     {
-        afficherImage(renderer, snakeTemp->img, snakeTemp->r);
+        /*afficherImage(renderer, snakeTemp->img, &snakeTemp->r);*/
+        SDL_RenderClear(renderer);
+        if(SDL_RenderCopy(renderer, snakeTemp->img, NULL, &snakeTemp->r) < 0) { snakeERROR(SDL_GetError()); }
+        SDL_RenderPresent(renderer);
         snakeTemp = snakeTemp->suivant;
     }
 }
@@ -47,8 +51,10 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
             p = (Point*)malloc(sizeof(Point));
             p->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
             rect = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-            rect->x = x * 25; rect->y = y * 25;
-            rect->h = h; rect->w = w;
+            rect->x = x * 25;
+            rect->y = y * 25;
+            /*rect->h = h;
+            rect->w = w;*/
             p->r = rect;
             p->suivant = NULL;
             afficherImage(renderer, p->img, p->r);

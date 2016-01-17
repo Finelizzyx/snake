@@ -1,12 +1,15 @@
 #ifndef SNAKE_H_INCLUDED
 #define SNAKE_H_INCLUDED
 
+#include <SDL.h>
+#include <SDL_image.h>
+
 #define WIDTH 800
 #define HEIGHT 600
-#define HAUT 3
-#define BAS 2
 #define DROITE 0
 #define GAUCHE 1
+#define BAS 2
+#define HAUT 3
 #define IMG_ROND_PATH "data/rond.png"
 #define IMG_POINT_PATH "data/point.png"
 #define NIVEAU1_PATH "data/niveau1.dat"
@@ -20,7 +23,7 @@
 typedef struct Snake
 {
     SDL_Texture *img;
-    SDL_Rect *r;
+    SDL_Rect r;
     struct Snake *suivant;
 
 } Snake;
@@ -62,6 +65,8 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin);
 
 Snakehead *initSerpent(SDL_Renderer *ecran);
 void Serpent(Snakehead *snake, int dir);
+void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran);
+void libererSerpent(Snakehead *snake);
 
 void snakeERROR(const char *erreur);
 

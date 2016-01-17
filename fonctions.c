@@ -5,6 +5,6 @@
 
 void snakeERROR(const char *erreur)
 {
-    fprintf(stderr, erreur);
+    fprintf(stderr, "ERROR - %s\n", erreur);
     exit(EXIT_FAILURE);
 }

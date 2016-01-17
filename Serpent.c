@@ -10,56 +10,91 @@ Gestion du serpent
 
 Snakehead *initSerpent(SDL_Renderer *ecran)
 {
-    Snakehead *sh;
-    Snake *s
-    SDL_Texture *img;
-    SDL_Rect *rect;
+    Snakehead *sh = NULL;
+    Snake *s = NULL;
+    SDL_Texture *img = NULL;
+    /*SDL_Rect *rect;*/
 
-    if((sh = (Snakehead*)malloc(sizeof(Snakehead))) == NULL) { snakeERROR("ERROR - Erreur allocation mémoire !"); }
-    if((s = (Snake*)malloc(sizeof(Snake)))  == NULL) { snakeERROR("ERROR - Erreur allocation mémoire !"); }
-    if((rect = (SDL_Rect*)malloc(sizeof(SDL_Rect)))  == NULL) { snakeERROR("ERROR - Erreur allocation mémoire !"); }
+    if((sh = (Snakehead*)malloc(sizeof(Snakehead))) == NULL) { snakeERROR("Erreur allocation mémoire !"); }
+    if((s = (Snake*)malloc(sizeof(Snake)))  == NULL) { snakeERROR("Erreur allocation mémoire !"); }
+    /*if((rect = (SDL_Rect*)malloc(sizeof(SDL_Rect)))  == NULL) { snakeERROR("ERROR - Erreur allocation mémoire !"); }*/
 
 	/* load our image */
 	img = IMG_LoadTexture(ecran, IMG_ROND_PATH);
-	SDL_QueryTexture(img, NULL, NULL, rect->w, rect->h); /* get the width and height of the texture */
+	SDL_QueryTexture(img, NULL, NULL, &s->r.w, &s->r.h); /* get the width and height of the texture */
 	/* put the location where we want the texture to be drawn into a rectangle
      I'm also scaling the texture 2x simply by setting the width and height */
+    s->img = img;
 
-    rect->x = rand()%(WIDTH + 1 - rect.w);
-    rect->y = rand()%(HEIGHT + 1 - rect.h);
+    s->r.x = rand()%(WIDTH + 1 - s->r.w);
+    s->r.y = rand()%(HEIGHT + 1 - s->r.h);
 
     sh->premier = s;
     sh->nb = 1;
-    s->img = img;
-    s->r = rect;
 
     return sh;
 }
 
 void Serpent(Snakehead *snake, int dir) /*Tête vers la droite et glissement du reste du corps */
 {
-    Snake *snaketemp = snake->premier;
-    int xprem = snaketemp->r->x;
-    int yprem = snaketemp->r->y;
-    snaketemp = snaketemp->suivant;
+    Snake *snaketemp = snake->premier->suivant;
+    /*int xprem = snake->premier->r->x;
+    int yprem = snake->premier->r->y;*/
 
     while(snaketemp->suivant != NULL)
     {
-        snaketemp->r->x = snaketemp->suivant->r->x;
-        snaketemp->r->y = snaketemp->suivant->r->y;
+        snaketemp->r.x = snaketemp->suivant->r.x;
+        snaketemp->r.y = snaketemp->suivant->r.y;
         snaketemp = snaketemp->suivant;
     }
 
     switch(dir)
     {
         case DROITE:
+            snaketemp->r.x += snaketemp->r.w;
             break;
         case GAUCHE:
+            snaketemp->r.x -= snaketemp->r.w;
             break;
         case HAUT:
+            snaketemp->r.y += snaketemp->r.h;
             break;
-        case BAS;
+        case BAS:
+            snaketemp->r.y -= snaketemp->r.h;
             break;
     }
 
+}
+
+void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran)
+{
+    Snake *nouveau;
+    /*SDL_Rect *rect;*/
+    SDL_Texture *img;
+
+    if((nouveau = (Snake*)malloc(sizeof(Snake))) == NULL) { snakeERROR("Erreur allocation mémoire !"); }
+    /*if((rect = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL) { snakeERROR("ERROR - Erreur allocation mémoire !"); }*/
+
+    img = IMG_LoadTexture(ecran, IMG_ROND_PATH);
+    SDL_QueryTexture(img, NULL, NULL, &nouveau->r.w, &nouveau->r.h);
+
+    nouveau->img = img;
+
+    nouveau->suivant = snake->premier;
+    snake->premier = nouveau;
+    snake->nb++;
+}
+
+void libererSerpent(Snakehead *snake)
+{
+    Snake *actuel = NULL;
+
+    while(snake->premier != NULL)
+    {
+        actuel = snake->premier;
+        snake->premier = snake->premier->suivant;
+        SDL_DestroyTexture(actuel->img);
+        free(actuel);
+    }
+    free(snake);
 }

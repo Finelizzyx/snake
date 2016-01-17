@@ -79,17 +79,16 @@ int main (int argc, char *argv[]) {
 
         if(c == vitesse)
         {
-            Serpent(snake, dir);
+            Serpent(snake, direction);
             c = 0;
         }
         else c++;
 
 	}
 
-	SDL_DestroyTexture(img);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
-    free(snake);
+    libererSerpent(snake);
 
     pt = points->premier;
     while(pt != NULL) {
@@ -99,6 +98,8 @@ int main (int argc, char *argv[]) {
         pt = ptsuivant;
     }
     free(points);
+
+    SDL_Quit();
 
 	return 0;
 }
