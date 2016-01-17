@@ -25,6 +25,12 @@ typedef struct Snake
 
 } Snake;
 
+typedef struct Snakehead
+{
+    int nb;
+    struct Snake *premier;
+} Snakehead;
+
 typedef struct Point
 {
     SDL_Texture *img;
@@ -42,18 +48,21 @@ typedef struct Points
 EXTERN SDL_Window *win;
 EXTERN SDL_Renderer *renderer;
 EXTERN SDL_Texture *img;
-EXTERN int w, h; /* texture width & height */
-EXTERN SDL_Rect texr;
 EXTERN int direction;
 EXTERN int c;
 EXTERN int vitesse;
 EXTERN int continuer;
-EXTERN Snake *snake;
+EXTERN Snakehead *snake;
 EXTERN Points *points;
 
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
-void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
+void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake);
 Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin);
+
+Snakehead *initSerpent(SDL_Renderer *ecran);
+void Serpent(Snakehead *snake, int dir);
+
+void snakeERROR(const char *erreur);
 
 #endif

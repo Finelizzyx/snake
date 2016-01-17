@@ -33,23 +33,10 @@ int main (int argc, char *argv[]) {
 	win = SDL_CreateWindow("Snake", 100, 100, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
-	/* load our image */
-	img = IMG_LoadTexture(renderer, IMG_ROND_PATH);
-	SDL_QueryTexture(img, NULL, NULL, &w, &h); /* get the width and height of the texture */
-	/* put the location where we want the texture to be drawn into a rectangle
-     I'm also scaling the texture 2x simply by setting the width and height */
+
+    snake = initSerpent(renderer);
 
     direction = rand()%4;
-    texr.x = rand()%(WIDTH + 1 - w);
-    texr.y = rand()%(HEIGHT + 1 - h);
-    texr.w = w;
-    texr.h = h;
-
-    snake = (Snake*)malloc(sizeof(Snake));
-
-    snake->img = img;
-    snake->r = &texr;
-    snake->suivant = NULL;
 
     points = AfficherPoints(renderer, NIVEAU1_PATH);
 
@@ -92,21 +79,7 @@ int main (int argc, char *argv[]) {
 
         if(c == vitesse)
         {
-            switch(direction)
-            {
-                case DROITE:
-                    snake->r->x += w;
-                    break;
-                case GAUCHE:
-                    snake->r->x -= w;
-                    break;
-                case BAS:
-                    snake->r->y += h;
-                    break;
-                case HAUT:
-                    snake->r->y -= h;
-                    break;
-            }
+            Serpent(snake, dir);
             c = 0;
         }
         else c++;

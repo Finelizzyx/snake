@@ -16,11 +16,11 @@ void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r)
     SDL_RenderPresent(renderer);
 }
 
-void afficherSerpent(SDL_Renderer *renderer, Snake *snake)
+void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake)
 {
-    Snake *snakeTemp = snake;
+    Snake *snakeTemp = snake->premier;
 
-    while(snakeTemp != NULL)
+    while(snakeTemp != NULL) /* Affichage du corps */
     {
         afficherImage(renderer, snakeTemp->img, snakeTemp->r);
         snakeTemp = snakeTemp->suivant;
