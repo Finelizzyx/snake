@@ -6,13 +6,14 @@
 
 #define WIDTH 800
 #define HEIGHT 600
-#define DROITE 0
-#define GAUCHE 1
-#define BAS 2
-#define HAUT 3
+#define IMG_TETEH_PATH "data/teteh.png"
+#define IMG_TETED_PATH "data/teted.png"
+#define IMG_TETEB_PATH "data/teteb.png"
+#define IMG_TETEG_PATH "data/teteg.png"
 #define IMG_ROND_PATH "data/rond.png"
 #define IMG_POINT_PATH "data/point.png"
 #define NIVEAU1_PATH "data/niveau1.dat"
+#define INTERVALLE 200
 
 #ifdef MAINFILE
 #define EXTERN
@@ -20,55 +21,61 @@
 #define EXTERN extern
 #endif
 
-typedef struct Snake
+typedef enum Direction
+{
+    HAUT, DROITE, BAS, GAUCHE
+
+} Direction;
+
+typedef struct ElemSnake /* Eléments de la liste du snake*/
 {
     SDL_Texture *img;
     SDL_Rect *r;
-    struct Snake *suivant;
+    struct ElemSnake *suivant;
 
+} ElemSnake;
+
+typedef struct Snake /* Structure de contrôle gérant le snake */
+{
+    int nb; /* Noombre d'éléments */
+    Direction direction; /* Direction du serpent */
+    ElemSnake *premier;
 } Snake;
 
-typedef struct Snakehead
-{
-    int nb;
-    struct Snake *premier;
-} Snakehead;
-
-typedef struct Point
+typedef struct ElemPoint /* Elément de la liste de points */
 {
     SDL_Texture *img;
     SDL_Rect *r;
-    struct Point *suivant;
+    struct ElemPoint *suivant;
 
-} Point;
+} ElemPoint;
 
-typedef struct Points
+typedef struct Points /* Structure de contrôle gérant les points */
 {
     int n; /* Nombre d'éléments */
-    struct Point *premier;
+    ElemPoint *premier;
+
 } Points;
 
 EXTERN SDL_Window *win;
 EXTERN SDL_Renderer *renderer;
-EXTERN SDL_Texture *img;
-EXTERN int direction;
-EXTERN int c;
-EXTERN long vitesse;
 EXTERN int continuer;
-EXTERN Snakehead *snake;
+EXTERN Snake *snake;
 EXTERN Points *points;
+EXTERN int tempsActuel;
+EXTERN int tempsPrecedent;
 
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
-void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake);
+void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
 Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin);
 
-Snakehead *initSerpent(SDL_Renderer *ecran);
-void Serpent(Snakehead *snake, int dir);
-void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran);
-void libererSerpent(Snakehead *snake);
+Snake *initSerpent(SDL_Renderer *ecran);
+void deplacerSerpent(Snake *snake);
+void ajouterSerpent(Snake *snake, SDL_Renderer *ecran);
+void libererSerpent(Snake *snake);
 
-int collisionPoint(Snakehead *s, Points *p);
+int collisionPoint(Snake *s, Points *p);
 
 void snakeERROR(const char *erreur);
 

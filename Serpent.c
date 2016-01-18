@@ -8,82 +8,100 @@ Gestion du serpent
 
 #include "snake.h"
 
-Snakehead *initSerpent(SDL_Renderer *ecran)
+Snake *initSerpent(SDL_Renderer *renderer)
 {
-    Snakehead *sh = NULL;
-    Snake *s = NULL;
-    SDL_Texture *img = NULL;
-    SDL_Rect *rect;
+    Snake *snake = NULL;
+    ElemSnake *elemSnake = NULL;
 
-    if((sh = (Snakehead*)malloc(sizeof(Snakehead))) == NULL) { snakeERROR("Erreur allocation mémoire !"); }
-    if((s = (Snake*)malloc(sizeof(Snake)))  == NULL) { snakeERROR("Erreur allocation mémoire !"); }
-    if((rect = (SDL_Rect*)malloc(sizeof(SDL_Rect)))  == NULL) { snakeERROR("Erreur allocation mémoire !"); }
+    if((snake = (Snake*)malloc(sizeof(Snake))) == NULL)
+        snakeERROR("Erreur allocation mémoire !");
 
-    s->r = rect;
-	/* load our image */
-	img = IMG_LoadTexture(ecran, IMG_ROND_PATH);
-	SDL_QueryTexture(img, NULL, NULL, &s->r->w, &s->r->h); /* get the width and height of the texture */
-	/* put the location where we want the texture to be drawn into a rectangle
-     I'm also scaling the texture 2x simply by setting the width and height */
-    s->img = img;
+    snake->nb = 1;
+    snake->direction = rand()%4; /* Donne une direction aléatoire à l'initialisation */
 
-    s->r->x = (rand()%(WIDTH/s->r->w)) * s->r->w;
-    s->r->y = (rand()%(HEIGHT/s->r->h)) * s->r->h;
-    s->suivant = NULL;
+    if((elemSnake = (ElemSnake*)malloc(sizeof(ElemSnake)))  == NULL)
+        snakeERROR("Erreur allocation mémoire !");
 
-    sh->premier = s;
-    sh->nb = 1;
+    if((elemSnake->r = (SDL_Rect*)malloc(sizeof(SDL_Rect)))  == NULL)
+        snakeERROR("Erreur allocation mémoire !");
 
-    return sh;
-}
-
-void Serpent(Snakehead *snake, int dir) /*Tête vers la droite et glissement du reste du corps */
-{
-    Snake *snaketemp = snake->premier;
-
-    SDL_RenderFillRect(renderer, snaketemp->r);
-
-    while(snaketemp->suivant != NULL)
-    {
-        snaketemp->r->x = snaketemp->suivant->r->x;
-        snaketemp->r->y = snaketemp->suivant->r->y;
-        snaketemp = snaketemp->suivant;
-    }
-
-    switch(dir)
-    {
-        case DROITE:
-            snaketemp->r->x += snaketemp->r->w;
-            break;
-        case GAUCHE:
-            snaketemp->r->x -= snaketemp->r->w;
-            break;
+	/* chargement de l'image en fonction de la direction */
+	switch(snake->direction)
+	{
         case HAUT:
-            snaketemp->r->y -= snaketemp->r->h;
+            elemSnake->img = IMG_LoadTexture(renderer, IMG_TETEH_PATH);
+            break;
+        case DROITE:
+            elemSnake->img = IMG_LoadTexture(renderer, IMG_TETED_PATH);
             break;
         case BAS:
-            snaketemp->r->y += snaketemp->r->h;
+            elemSnake->img = IMG_LoadTexture(renderer, IMG_TETEB_PATH);
+            break;
+        case GAUCHE:
+            elemSnake->img = IMG_LoadTexture(renderer, IMG_TETEG_PATH);
+            break;
+	}
+
+	SDL_QueryTexture(elemSnake->img, NULL, NULL, &elemSnake->r->w, &elemSnake->r->h); /* récupère la hauteur et la largeur de la texture */
+
+    elemSnake->r->x = (rand()%(WIDTH/elemSnake->r->w)) * elemSnake->r->w;
+    elemSnake->r->y = (rand()%(HEIGHT/elemSnake->r->h)) * elemSnake->r->h;
+    elemSnake->suivant = NULL;
+
+    snake->premier = elemSnake;
+
+    return snake;
+}
+
+void deplacerSerpent(Snake *snake) /*Tête dans la bonne direction et glissement du reste du corps */
+{
+    ElemSnake *snakeTemp = snake->premier;
+
+    SDL_RenderFillRect(renderer, snakeTemp->r);
+
+    while(snakeTemp->suivant != NULL)
+    {
+        snakeTemp->r->x = snakeTemp->suivant->r->x;
+        snakeTemp->r->y = snakeTemp->suivant->r->y;
+        snakeTemp = snakeTemp->suivant;
+    }
+    /* snakeTemp correspond à la tête du serpent */
+
+    SDL_DestroyTexture(snakeTemp->img);
+    switch(snake->direction)
+    {
+        case HAUT:
+            snakeTemp->r->y -= snakeTemp->r->h;
+            snakeTemp->img = IMG_LoadTexture(renderer, IMG_TETEH_PATH);
+            break;
+        case DROITE:
+            snakeTemp->r->x += snakeTemp->r->w;
+            snakeTemp->img = IMG_LoadTexture(renderer, IMG_TETED_PATH);
+            break;
+        case BAS:
+            snakeTemp->r->y += snakeTemp->r->h;
+            snakeTemp->img = IMG_LoadTexture(renderer, IMG_TETEB_PATH);
+            break;
+        case GAUCHE:
+            snakeTemp->r->x -= snakeTemp->r->w;
+            snakeTemp->img = IMG_LoadTexture(renderer, IMG_TETEG_PATH);
             break;
     }
     if(collisionPoint(snake, points)) { ajouterSerpent(snake, renderer); }
 
 }
 
-void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran)
+void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
 {
-    Snake *nouveau;
-    SDL_Rect *rect;
-    SDL_Texture *img;
+    ElemSnake *nouveau = NULL;
 
-    if((nouveau = (Snake*)malloc(sizeof(Snake))) == NULL) { snakeERROR("Erreur allocation mémoire !"); }
-    if((rect = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL) { snakeERROR("Erreur allocation mémoire !"); }
+    if((nouveau = (ElemSnake*)malloc(sizeof(ElemSnake))) == NULL)
+        snakeERROR("Erreur allocation mémoire !");
+    if((nouveau->r = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL)
+        snakeERROR("Erreur allocation mémoire !");
 
-    nouveau->r = rect;
-
-    img = IMG_LoadTexture(ecran, IMG_ROND_PATH);
-    SDL_QueryTexture(img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
-
-    nouveau->img = img;
+    nouveau->img = IMG_LoadTexture(renderer, IMG_ROND_PATH);
+    SDL_QueryTexture(nouveau->img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
 
     nouveau->suivant = snake->premier;
     snake->premier = nouveau;
@@ -91,9 +109,9 @@ void ajouterSerpent(Snakehead *snake, SDL_Renderer *ecran)
 
 }
 
-void libererSerpent(Snakehead *snake)
+void libererSerpent(Snake *snake)
 {
-    Snake *actuel = NULL;
+    ElemSnake *actuel = NULL;
 
     while(snake->premier != NULL)
     {
@@ -106,23 +124,26 @@ void libererSerpent(Snakehead *snake)
     free(snake);
 }
 
-int collisionPoint(Snakehead *s, Points *p)
+int collisionPoint(Snake *s, Points *p)
 {
-    Snake *snaketemp = s->premier;
-    Point *pointemp  = p->premier;
-    Point *pointprec = NULL;
+    ElemSnake *snakeTete = s->premier;
+    ElemPoint *pointemp  = p->premier;
+    ElemPoint *pointprec = NULL;
     int collision = 0;
 
     /* Aller à la fin du serpent pour y trouver la tête */
-    while(snaketemp->suivant != NULL) { snaketemp = snaketemp->suivant; }
+    while(snakeTete->suivant != NULL)
+        snakeTete = snakeTete->suivant;
 
     while(pointemp != NULL && collision == 0)
     {
-        if(SDL_HasIntersection(snaketemp->r, pointemp->r))
+        if(SDL_HasIntersection(snakeTete->r, pointemp->r))
         {
             collision = 1;
-            if(pointprec == NULL) { p->premier = pointemp->suivant; } /* Il faut enlever le 1er élément */
-            else { pointprec->suivant = pointemp->suivant; }
+            if(pointprec == NULL)
+                p->premier = pointemp->suivant; /* Il faut enlever le 1er élément */
+            else
+                pointprec->suivant = pointemp->suivant;
 
             SDL_DestroyTexture(pointemp->img);
             free(pointemp->r);

@@ -16,9 +16,9 @@ void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r)
     SDL_RenderPresent(renderer);
 }
 
-void afficherSerpent(SDL_Renderer *renderer, Snakehead *snake)
+void afficherSerpent(SDL_Renderer *renderer, Snake *snake)
 {
-    Snake *snakeTemp = snake->premier;
+    ElemSnake *snakeTemp = snake->premier;
 
     while(snakeTemp != NULL) /* Affichage du corps */
     {
@@ -31,8 +31,8 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
 {
     FILE *f;
     Points *pts;
-    Point *p = NULL;
-    Point *pre = NULL; /* Point précédent pour la gestion du suivant */
+    ElemPoint *p = NULL;
+    ElemPoint *pre = NULL; /* Point précédent pour la gestion du suivant */
     SDL_Rect *rect;
     int x, y;
     int c = 0; /* Nombre d'éléments */
@@ -45,7 +45,7 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
     {
         while((fscanf(f, "%d,%d", &x, &y)) != EOF)
         {
-            p = (Point*)malloc(sizeof(Point));
+            p = (ElemPoint*)malloc(sizeof(ElemPoint));
             rect = (SDL_Rect*)malloc(sizeof(SDL_Rect));
             p->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
             SDL_QueryTexture(p->img, NULL, NULL, &rect->w, &rect->h);

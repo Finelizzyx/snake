@@ -10,33 +10,29 @@
 
 int main (int argc, char *argv[]) {
 
-    Point *pt;
-    Point *ptsuivant;
+    ElemPoint *pt = NULL;
+    ElemPoint *ptsuivant = NULL;
 
-	/* variable declarations */
+	/* déclaration des variables*/
 	win = NULL;
 	renderer = NULL;
-	img = NULL;
-	c = 0;
-	vitesse = 10000000;
 	continuer = 1;
 	snake = NULL;
+	tempsActuel = 0;
+	tempsPrecedent = 0;
 
     srand(time(NULL));
 
-	/* Initialize SDL. */
+	/* Initialisation de la SDL. */
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-			return 1;
+        return 1;
 
-	/* create the window and renderer
-	 note that the renderer is accelerated */
+	/* Création de la fenêtre et du renderer */
 	win = SDL_CreateWindow("Snake", 100, 100, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
-
     snake = initSerpent(renderer);
 
-    direction = rand()%4;
 
     points = AfficherPoints(renderer, NIVEAU1_PATH);
 
@@ -58,31 +54,28 @@ int main (int argc, char *argv[]) {
                     switch(e.key.keysym.sym)
                     {
                         case SDLK_UP:
-                            direction = HAUT;
+                            snake->direction = HAUT;
                             break;
                         case SDLK_DOWN:
-                            direction = BAS;
+                            snake->direction = BAS;
                             break;
                         case SDLK_RIGHT:
-                            direction = DROITE;
+                            snake->direction = DROITE;
                             break;
                         case SDLK_LEFT:
-                            direction = GAUCHE;
+                            snake->direction = GAUCHE;
                             break;
-
                     }
             }
-
 		}
 
-        if(c == vitesse)
+        tempsActuel = SDL_GetTicks();
+        if(tempsActuel - tempsPrecedent > INTERVALLE) /* Si 30 ms se sont écoulées */
         {
-            Serpent(snake, direction);
+            deplacerSerpent(snake);
             afficherSerpent(renderer, snake);
-            c = 0;
+            tempsPrecedent = tempsActuel;
         }
-        else c++;
-
 	}
 
 	SDL_DestroyRenderer(renderer);
