@@ -8,7 +8,7 @@ Gestion du serpent
 
 #include "snake.h"
 
-Snake *initSerpent(SDL_Renderer *renderer)
+Snake* initSerpent(SDL_Renderer *renderer)
 {
     Snake *snake = NULL;
     ElemSnake *elemSnake = NULL;
@@ -106,7 +106,6 @@ void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
     nouveau->suivant = snake->premier;
     snake->premier = nouveau;
     snake->nb++;
-
 }
 
 void libererSerpent(Snake *snake)
@@ -124,37 +123,102 @@ void libererSerpent(Snake *snake)
     free(snake);
 }
 
-int collisionPoint(Snake *s, Points *p)
+Points* initPoints(SDL_Renderer *renderer)
 {
-    ElemSnake *snakeTete = s->premier;
-    ElemPoint *pointemp  = p->premier;
-    ElemPoint *pointprec = NULL;
+    Points *points = NULL;
+
+    if((points = (Points*)malloc(sizeof(Points))) == NULL)
+        snakeERROR("Erreur allocation mémoire");
+
+    points->nb = 0;
+    points->premier = NULL;
+
+    return points;
+}
+
+void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y)
+{
+    ElemPoint *nouveau = NULL;
+
+    if((nouveau = (ElemPoint*)malloc(sizeof(ElemPoint))) == NULL)
+        snakeERROR("Erreur allocation mémoire");
+    if((nouveau->r = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL)
+        snakeERROR("Erreur allocation mémoire !");
+
+    nouveau->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
+    SDL_QueryTexture(nouveau->img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
+    nouveau->r->x = x;
+    nouveau->r->y = y;
+
+    nouveau->suivant = points->premier;
+    points->premier = nouveau;
+    points->nb++;
+}
+
+void supprimerPoint(Points *points, ElemPoint *elemASupprimer)
+{
+    ElemPoint *actuel = NULL;
+
+    if(elemASupprimer == points->premier)
+    {
+        points->premier = points->premier->suivant;
+        SDL_DestroyTexture(elemASupprimer->img);
+        free(elemASupprimer->r);
+        free(elemASupprimer);
+    }
+    else
+    {
+        actuel = points->premier;
+        while(actuel->suivant != elemASupprimer)
+            actuel = actuel->suivant;
+
+        /* actuel est le précédent de l'élément à supprimer */
+        if(actuel->suivant != NULL)
+        {
+            actuel = elemASupprimer->suivant;
+            SDL_DestroyTexture(elemASupprimer->img);
+            free(elemASupprimer->r);
+            free(elemASupprimer);
+        }
+    }
+
+}
+
+void libererPoints(Points *points)
+{
+    ElemPoint *actuel = NULL;
+
+    while(points->premier != NULL)
+    {
+        actuel = points->premier;
+        points->premier = points->premier->suivant;
+        SDL_DestroyTexture(actuel->img);
+        free(actuel->r);
+        free(actuel);
+    }
+    free(points);
+}
+
+int collisionPoint(Snake *snake, Points *points)
+{
+    ElemSnake *snakeTete = snake->premier;
+    ElemPoint *pointTemp = points->premier;
     int collision = 0;
 
     /* Aller à la fin du serpent pour y trouver la tête */
     while(snakeTete->suivant != NULL)
         snakeTete = snakeTete->suivant;
 
-    while(pointemp != NULL && collision == 0)
+    /* snakeTete est le dernier élément càd la tête du serpent */
+    while(pointTemp != NULL && !collision)
     {
-        if(SDL_HasIntersection(snakeTete->r, pointemp->r))
+        if(SDL_HasIntersection(snakeTete->r, pointTemp->r))
         {
             collision = 1;
-            if(pointprec == NULL)
-                p->premier = pointemp->suivant; /* Il faut enlever le 1er élément */
-            else
-                pointprec->suivant = pointemp->suivant;
-
-            SDL_DestroyTexture(pointemp->img);
-            free(pointemp->r);
-            free(pointemp);
-            pointemp = NULL;
+            supprimerPoint(points, pointTemp);
         }
         else
-        {
-            pointprec = pointemp;
-            pointemp = pointemp->suivant;
-        }
+            pointTemp = pointTemp->suivant;
     }
 
     return collision;

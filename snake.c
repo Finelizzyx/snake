@@ -8,11 +8,8 @@
 
 #include "snake.h"
 
-int main (int argc, char *argv[]) {
-
-    ElemPoint *pt = NULL;
-    ElemPoint *ptsuivant = NULL;
-
+int main (int argc, char *argv[])
+{
 	/* déclaration des variables*/
 	win = NULL;
 	renderer = NULL;
@@ -81,15 +78,7 @@ int main (int argc, char *argv[]) {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
     libererSerpent(snake);
-
-    pt = points->premier;
-    while(pt != NULL) {
-        ptsuivant = pt->suivant;
-        SDL_DestroyTexture(pt->img);
-        free(pt);
-        pt = ptsuivant;
-    }
-    free(points);
+    libererPoints(points);
 
     SDL_Quit();
 

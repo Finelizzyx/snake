@@ -27,7 +27,7 @@ void afficherSerpent(SDL_Renderer *renderer, Snake *snake)
     }
 }
 
-Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
+Points* AfficherPoints(SDL_Renderer *renderer, const char *chemin)
 {
     FILE *f;
     Points *pts;
@@ -74,7 +74,7 @@ Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin)
     }
     fclose(f);
 
-    pts->n = c;
+    pts->nb = c;
 
     return pts;
 }

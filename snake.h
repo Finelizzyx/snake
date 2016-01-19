@@ -52,7 +52,7 @@ typedef struct ElemPoint /* Elément de la liste de points */
 
 typedef struct Points /* Structure de contrôle gérant les points */
 {
-    int n; /* Nombre d'éléments */
+    int nb; /* Nombre d'éléments */
     ElemPoint *premier;
 
 } Points;
@@ -68,12 +68,17 @@ EXTERN int tempsPrecedent;
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
 void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
-Points *AfficherPoints(SDL_Renderer *renderer, const char *chemin);
+Points* AfficherPoints(SDL_Renderer *renderer, const char *chemin);
 
-Snake *initSerpent(SDL_Renderer *ecran);
+Snake* initSerpent(SDL_Renderer *renderer);
 void deplacerSerpent(Snake *snake);
 void ajouterSerpent(Snake *snake, SDL_Renderer *ecran);
 void libererSerpent(Snake *snake);
+
+Points* initPoints(SDL_Renderer *renderer);
+void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y);
+void supprimerPoint(Points *points, ElemPoint *elemASupprimer);
+void libererPoints(Points *points);
 
 int collisionPoint(Snake *s, Points *p);
 
