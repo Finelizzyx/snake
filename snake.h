@@ -68,19 +68,21 @@ EXTERN int tempsPrecedent;
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
 void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
-Points* AfficherPoints(SDL_Renderer *renderer, const char *chemin);
+void afficherPoints(SDL_Renderer *renderer, Points *points);
+/*Points* AfficherPointsBis(SDL_Renderer *renderer, const char *chemin);*/
 
 Snake* initSerpent(SDL_Renderer *renderer);
-void deplacerSerpent(Snake *snake);
-void ajouterSerpent(Snake *snake, SDL_Renderer *ecran);
+void deplacerSerpent(Snake *snake, SDL_Renderer *renderer);
+void ajouterSerpent(Snake *snake, SDL_Renderer *renderer);
 void libererSerpent(Snake *snake);
 
-Points* initPoints(SDL_Renderer *renderer);
+Points* initPoints(void);
+void chargerPoints(Points *points, const char *chemin);
 void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y);
 void supprimerPoint(Points *points, ElemPoint *elemASupprimer);
 void libererPoints(Points *points);
 
-int collisionPoint(Snake *s, Points *p);
+SDL_bool collisionPoint(Snake *snake, Points *points);
 
 void snakeERROR(const char *erreur);
 

@@ -27,15 +27,26 @@ void afficherSerpent(SDL_Renderer *renderer, Snake *snake)
     }
 }
 
-Points* AfficherPoints(SDL_Renderer *renderer, const char *chemin)
+void afficherPoints(SDL_Renderer *renderer, Points *points)
+{
+    ElemPoint *pointTemp = points->premier;
+
+    while(pointTemp != NULL)
+    {
+        afficherImage(renderer, pointTemp->img, pointTemp->r);
+        pointTemp = pointTemp->suivant;
+    }
+}
+
+/*Points* AfficherPointsBis(SDL_Renderer *renderer, const char *chemin)
 {
     FILE *f;
     Points *pts;
     ElemPoint *p = NULL;
-    ElemPoint *pre = NULL; /* Point précédent pour la gestion du suivant */
+    ElemPoint *pre = NULL;
     SDL_Rect *rect;
     int x, y;
-    int c = 0; /* Nombre d'éléments */
+    int c = 0;
     char cerreur[128];
 
     pts = (Points*)malloc(sizeof(Points));
@@ -77,5 +88,5 @@ Points* AfficherPoints(SDL_Renderer *renderer, const char *chemin)
     pts->nb = c;
 
     return pts;
-}
+}*/
 

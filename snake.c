@@ -29,9 +29,10 @@ int main (int argc, char *argv[])
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     snake = initSerpent(renderer);
+    points = initPoints();
+    chargerPoints(points, NIVEAU1_PATH);
 
-
-    points = AfficherPoints(renderer, NIVEAU1_PATH);
+    afficherPoints(renderer, points);
 
 	while (continuer) {
 
@@ -69,7 +70,7 @@ int main (int argc, char *argv[])
         tempsActuel = SDL_GetTicks();
         if(tempsActuel - tempsPrecedent > INTERVALLE) /* Si 30 ms se sont écoulées */
         {
-            deplacerSerpent(snake);
+            deplacerSerpent(snake, renderer);
             afficherSerpent(renderer, snake);
             tempsPrecedent = tempsActuel;
         }

@@ -2,6 +2,7 @@
 Gestion du serpent
 ############################################ */
 #include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -53,7 +54,7 @@ Snake* initSerpent(SDL_Renderer *renderer)
     return snake;
 }
 
-void deplacerSerpent(Snake *snake) /*Tête dans la bonne direction et glissement du reste du corps */
+void deplacerSerpent(Snake *snake, SDL_Renderer *renderer) /*Tête dans la bonne direction et glissement du reste du corps */
 {
     ElemSnake *snakeTemp = snake->premier;
 
@@ -123,7 +124,7 @@ void libererSerpent(Snake *snake)
     free(snake);
 }
 
-Points* initPoints(SDL_Renderer *renderer)
+Points* initPoints(void)
 {
     Points *points = NULL;
 
@@ -134,6 +135,23 @@ Points* initPoints(SDL_Renderer *renderer)
     points->premier = NULL;
 
     return points;
+}
+
+void chargerPoints(Points *points, const char *chemin)
+{
+    FILE *f;
+    int x, y;
+    char erreur[128];
+
+    if((f = fopen(chemin, "r")) != NULL)
+        while((fscanf(f, "%d,%d", &x, &y)) != EOF)
+            ajouterPoint(points, renderer, x, y);
+    else
+    {
+        sprintf(erreur, "Impossible d'ouvrir le fichier %s !", chemin);
+        snakeERROR(erreur);
+    }
+    fclose(f);
 }
 
 void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y)
@@ -147,8 +165,8 @@ void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y)
 
     nouveau->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
     SDL_QueryTexture(nouveau->img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
-    nouveau->r->x = x;
-    nouveau->r->y = y;
+    nouveau->r->x = x * nouveau->r->w;
+    nouveau->r->y = y * nouveau->r->h;
 
     nouveau->suivant = points->premier;
     points->premier = nouveau;
@@ -175,7 +193,7 @@ void supprimerPoint(Points *points, ElemPoint *elemASupprimer)
         /* actuel est le précédent de l'élément à supprimer */
         if(actuel->suivant != NULL)
         {
-            actuel = elemASupprimer->suivant;
+            actuel->suivant = elemASupprimer->suivant;
             SDL_DestroyTexture(elemASupprimer->img);
             free(elemASupprimer->r);
             free(elemASupprimer);
@@ -199,11 +217,11 @@ void libererPoints(Points *points)
     free(points);
 }
 
-int collisionPoint(Snake *snake, Points *points)
+SDL_bool collisionPoint(Snake *snake, Points *points)
 {
     ElemSnake *snakeTete = snake->premier;
     ElemPoint *pointTemp = points->premier;
-    int collision = 0;
+    int collision = SDL_FALSE;
 
     /* Aller à la fin du serpent pour y trouver la tête */
     while(snakeTete->suivant != NULL)
@@ -214,7 +232,7 @@ int collisionPoint(Snake *snake, Points *points)
     {
         if(SDL_HasIntersection(snakeTete->r, pointTemp->r))
         {
-            collision = 1;
+            collision = SDL_TRUE;
             supprimerPoint(points, pointTemp);
         }
         else
