@@ -1,3 +1,6 @@
+/* #########################################
+Gestion des points
+############################################ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,7 +29,7 @@ void chargerPoints(Points *points, int niveau)
     char erreur[128];
     char chemin[20] = "";
 
-    chargerNiveau(chemin, niveau);
+    sprintf(chemin, "data/niveau%d.dat", niveau);
 
     if((f = fopen(chemin, "r")) != NULL)
         while((fscanf(f, "%d,%d", &x, &y)) != EOF)
@@ -107,14 +110,4 @@ void libererPoints(Points *points)
         free(actuel);
     }
     free(points);
-}
-
-void chargerNiveau(char* chaine, int niveau)
-{
-    char numNiveau[4];
-
-    strcat(chaine, "data/niveau");
-    sprintf(numNiveau, "%d", niveau);
-    strcat(chaine, numNiveau);
-    strcat(chaine, ".dat");
 }

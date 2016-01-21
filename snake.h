@@ -1,3 +1,6 @@
+/* #########################################
+Fichier d'en tête commun à tous les fichiers
+############################################ */
 #ifndef SNAKE_H_INCLUDED
 #define SNAKE_H_INCLUDED
 
@@ -70,7 +73,6 @@ EXTERN int niveauActuel;
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
 void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
 void afficherPoints(SDL_Renderer *renderer, Points *points);
-/*Points* AfficherPointsBis(SDL_Renderer *renderer, const char *chemin);*/
 
 Snake* initSerpent(SDL_Renderer *renderer);
 void deplacerSerpent(Snake *snake, SDL_Renderer *renderer);
@@ -83,7 +85,6 @@ void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y);
 void supprimerPoint(Points *points, ElemPoint *elemASupprimer);
 SDL_bool pointsVide(Points *points);
 void libererPoints(Points *points);
-void chargerNiveau(char* chaine, int niveau);
 
 SDL_bool collisionPoint(Snake *snake, Points *points);
 SDL_bool collisionSerpent(Snake *snake);

@@ -1,3 +1,6 @@
+/* #########################################
+Fonction main
+############################################ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -70,13 +73,18 @@ int main (int argc, char *argv[])
 		}
 
         tempsActuel = SDL_GetTicks();
-        if(tempsActuel - tempsPrecedent > INTERVALLE) /* Si 30 ms se sont écoulées */
+        if(tempsActuel - tempsPrecedent > INTERVALLE) /* Si 0.2 sec se sont écoulées */
         {
             deplacerSerpent(snake, renderer);
             afficherSerpent(renderer, snake);
             afficherPoints(renderer, points);
-            if(pointsVide(points) && niveauActuel < MAX_NIVEAUX)
-                chargerPoints(points, ++niveauActuel);
+            if(pointsVide(points))
+            {
+                if(niveauActuel < MAX_NIVEAUX) /* Il reste des niveaux à faire */
+                    chargerPoints(points, ++niveauActuel);
+                else /* On a fini tous les niveaux */
+                    continuer = SDL_FALSE;
+            }
             tempsPrecedent = tempsActuel;
         }
 	}

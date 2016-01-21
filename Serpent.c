@@ -20,10 +20,10 @@ Snake* initSerpent(SDL_Renderer *renderer)
     snake->nb = 1;
     snake->direction = rand()%4; /* Donne une direction aléatoire à l'initialisation */
 
-    if((elemSnake = (ElemSnake*)malloc(sizeof(ElemSnake)))  == NULL)
+    if((elemSnake = (ElemSnake*)malloc(sizeof(ElemSnake))) == NULL)
         snakeERROR("Erreur allocation mémoire !");
 
-    if((elemSnake->r = (SDL_Rect*)malloc(sizeof(SDL_Rect)))  == NULL)
+    if((elemSnake->r = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL)
         snakeERROR("Erreur allocation mémoire !");
 
 	/* chargement de l'image en fonction de la direction */
@@ -93,6 +93,16 @@ void deplacerSerpent(Snake *snake, SDL_Renderer *renderer) /*Tête dans la bonne 
 
     if(collisionSerpent(snake))
         continuer = SDL_FALSE;
+
+    /* Si le serpent sort de l'écran, il réapparaît de l'autre côté */
+    if(snakeTemp->r->x >= WIDTH)
+        snakeTemp->r->x = 0;
+    if(snakeTemp->r->x < 0)
+        snakeTemp->r->x = WIDTH - snakeTemp->r->w;
+    if(snakeTemp->r->y >= HEIGHT)
+        snakeTemp->r->y = 0;
+    if(snakeTemp->r->y < 0)
+        snakeTemp->r->y = HEIGHT - snakeTemp->r->h;
 }
 
 void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
@@ -140,7 +150,7 @@ SDL_bool collisionPoint(Snake *snake, Points *points)
     while(snakeTete->suivant != NULL)
         snakeTete = snakeTete->suivant;
 
-    /* snakeTete est le dernier élément càd la tête du serpent */
+    /* snakeTete est le dernier élément donc la tête du serpent */
     while(pointTemp != NULL && !collision)
     {
         if(SDL_HasIntersection(snakeTete->r, pointTemp->r))
