@@ -67,6 +67,9 @@
 		<Unit filename="fonctions.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="points.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="snake.c">
 			<Option compilerVar="CC" />
 		</Unit>

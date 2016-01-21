@@ -29,14 +29,15 @@ int main (int argc, char *argv[])
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     snake = initSerpent(renderer);
+    ajouterSerpent(snake, renderer);
     points = initPoints();
     chargerPoints(points, NIVEAU1_PATH);
 
     afficherPoints(renderer, points);
+    afficherSerpent(renderer, snake);
 
-	while (continuer) {
-
-		/* event handling */
+	while (continuer)
+    {
 		SDL_Event e;
 		if ( SDL_PollEvent(&e) ) {
             switch(e.type)
@@ -72,6 +73,9 @@ int main (int argc, char *argv[])
         {
             deplacerSerpent(snake, renderer);
             afficherSerpent(renderer, snake);
+            afficherPoints(renderer, points);
+            if(pointsVide(points))
+                chargerPoints(points, NIVEAU2_PATH);
             tempsPrecedent = tempsActuel;
         }
 	}

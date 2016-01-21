@@ -66,8 +66,8 @@ void deplacerSerpent(Snake *snake, SDL_Renderer *renderer) /*Tête dans la bonne 
         snakeTemp->r->y = snakeTemp->suivant->r->y;
         snakeTemp = snakeTemp->suivant;
     }
-    /* snakeTemp correspond à la tête du serpent */
 
+    /* snakeTemp correspond à la tête du serpent */
     SDL_DestroyTexture(snakeTemp->img);
     switch(snake->direction)
     {
@@ -88,8 +88,8 @@ void deplacerSerpent(Snake *snake, SDL_Renderer *renderer) /*Tête dans la bonne 
             snakeTemp->img = IMG_LoadTexture(renderer, IMG_TETEG_PATH);
             break;
     }
-    if(collisionPoint(snake, points)) { ajouterSerpent(snake, renderer); }
-
+    if(collisionPoint(snake, points))
+        ajouterSerpent(snake, renderer);
 }
 
 void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
@@ -122,99 +122,6 @@ void libererSerpent(Snake *snake)
         free(actuel);
     }
     free(snake);
-}
-
-Points* initPoints(void)
-{
-    Points *points = NULL;
-
-    if((points = (Points*)malloc(sizeof(Points))) == NULL)
-        snakeERROR("Erreur allocation mémoire");
-
-    points->nb = 0;
-    points->premier = NULL;
-
-    return points;
-}
-
-void chargerPoints(Points *points, const char *chemin)
-{
-    FILE *f;
-    int x, y;
-    char erreur[128];
-
-    if((f = fopen(chemin, "r")) != NULL)
-        while((fscanf(f, "%d,%d", &x, &y)) != EOF)
-            ajouterPoint(points, renderer, x, y);
-    else
-    {
-        sprintf(erreur, "Impossible d'ouvrir le fichier %s !", chemin);
-        snakeERROR(erreur);
-    }
-    fclose(f);
-}
-
-void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y)
-{
-    ElemPoint *nouveau = NULL;
-
-    if((nouveau = (ElemPoint*)malloc(sizeof(ElemPoint))) == NULL)
-        snakeERROR("Erreur allocation mémoire");
-    if((nouveau->r = (SDL_Rect*)malloc(sizeof(SDL_Rect))) == NULL)
-        snakeERROR("Erreur allocation mémoire !");
-
-    nouveau->img = IMG_LoadTexture(renderer, IMG_POINT_PATH);
-    SDL_QueryTexture(nouveau->img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
-    nouveau->r->x = x * nouveau->r->w;
-    nouveau->r->y = y * nouveau->r->h;
-
-    nouveau->suivant = points->premier;
-    points->premier = nouveau;
-    points->nb++;
-}
-
-void supprimerPoint(Points *points, ElemPoint *elemASupprimer)
-{
-    ElemPoint *actuel = NULL;
-
-    if(elemASupprimer == points->premier)
-    {
-        points->premier = points->premier->suivant;
-        SDL_DestroyTexture(elemASupprimer->img);
-        free(elemASupprimer->r);
-        free(elemASupprimer);
-    }
-    else
-    {
-        actuel = points->premier;
-        while(actuel->suivant != elemASupprimer)
-            actuel = actuel->suivant;
-
-        /* actuel est le précédent de l'élément à supprimer */
-        if(actuel->suivant != NULL)
-        {
-            actuel->suivant = elemASupprimer->suivant;
-            SDL_DestroyTexture(elemASupprimer->img);
-            free(elemASupprimer->r);
-            free(elemASupprimer);
-        }
-    }
-
-}
-
-void libererPoints(Points *points)
-{
-    ElemPoint *actuel = NULL;
-
-    while(points->premier != NULL)
-    {
-        actuel = points->premier;
-        points->premier = points->premier->suivant;
-        SDL_DestroyTexture(actuel->img);
-        free(actuel->r);
-        free(actuel);
-    }
-    free(points);
 }
 
 SDL_bool collisionPoint(Snake *snake, Points *points)

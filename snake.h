@@ -13,6 +13,7 @@
 #define IMG_ROND_PATH "data/rond.png"
 #define IMG_POINT_PATH "data/point.png"
 #define NIVEAU1_PATH "data/niveau1.dat"
+#define NIVEAU2_PATH "data/niveau2.dat"
 #define INTERVALLE 200
 
 #ifdef MAINFILE
@@ -80,6 +81,7 @@ Points* initPoints(void);
 void chargerPoints(Points *points, const char *chemin);
 void ajouterPoint(Points *points, SDL_Renderer *renderer, int x, int y);
 void supprimerPoint(Points *points, ElemPoint *elemASupprimer);
+SDL_bool pointsVide(Points *points);
 void libererPoints(Points *points);
 
 SDL_bool collisionPoint(Snake *snake, Points *points);
