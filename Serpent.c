@@ -90,6 +90,9 @@ void deplacerSerpent(Snake *snake, SDL_Renderer *renderer) /*Tête dans la bonne 
     }
     if(collisionPoint(snake, points))
         ajouterSerpent(snake, renderer);
+
+    if(collisionSerpent(snake))
+        continuer = SDL_FALSE;
 }
 
 void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
@@ -103,6 +106,9 @@ void ajouterSerpent(Snake *snake, SDL_Renderer *renderer)
 
     nouveau->img = IMG_LoadTexture(renderer, IMG_ROND_PATH);
     SDL_QueryTexture(nouveau->img, NULL, NULL, &nouveau->r->w, &nouveau->r->h);
+
+    nouveau->r->x = -50;
+    nouveau->r->y = -50;
 
     nouveau->suivant = snake->premier;
     snake->premier = nouveau;
@@ -128,7 +134,7 @@ SDL_bool collisionPoint(Snake *snake, Points *points)
 {
     ElemSnake *snakeTete = snake->premier;
     ElemPoint *pointTemp = points->premier;
-    int collision = SDL_FALSE;
+    SDL_bool collision = SDL_FALSE;
 
     /* Aller à la fin du serpent pour y trouver la tête */
     while(snakeTete->suivant != NULL)
@@ -144,6 +150,27 @@ SDL_bool collisionPoint(Snake *snake, Points *points)
         }
         else
             pointTemp = pointTemp->suivant;
+    }
+
+    return collision;
+}
+
+SDL_bool collisionSerpent(Snake *snake)
+{
+    ElemSnake *snakeTete = snake->premier;
+    ElemSnake *actuel = snake->premier;
+    SDL_bool collision = SDL_FALSE;
+
+    while(snakeTete->suivant != NULL)
+        snakeTete = snakeTete->suivant;
+
+    /* snakeTete est le dernier élément donc la tête du serpent */
+    while(actuel != snakeTete && !collision)
+    {
+        if(SDL_HasIntersection(actuel->r, snakeTete->r))
+            collision = SDL_TRUE;
+
+        actuel = actuel->suivant;
     }
 
     return collision;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -18,11 +19,14 @@ Points* initPoints(void)
     return points;
 }
 
-void chargerPoints(Points *points, const char *chemin)
+void chargerPoints(Points *points, int niveau)
 {
     FILE *f;
     int x, y;
     char erreur[128];
+    char chemin[20] = "";
+
+    chargerNiveau(chemin, niveau);
 
     if((f = fopen(chemin, "r")) != NULL)
         while((fscanf(f, "%d,%d", &x, &y)) != EOF)
@@ -103,4 +107,14 @@ void libererPoints(Points *points)
         free(actuel);
     }
     free(points);
+}
+
+void chargerNiveau(char* chaine, int niveau)
+{
+    char numNiveau[4];
+
+    strcat(chaine, "data/niveau");
+    sprintf(numNiveau, "%d", niveau);
+    strcat(chaine, numNiveau);
+    strcat(chaine, ".dat");
 }
