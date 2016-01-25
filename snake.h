@@ -68,6 +68,8 @@ EXTERN Points *points;
 EXTERN int tempsActuel;
 EXTERN int tempsPrecedent;
 EXTERN int niveauActuel;
+EXTERN SDL_bool pause;
+EXTERN SDL_bool gagner;
 
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
@@ -90,5 +92,6 @@ SDL_bool collisionPoint(Snake *snake, Points *points);
 SDL_bool collisionSerpent(Snake *snake);
 
 void snakeERROR(const char *erreur);
+void terminer(SDL_bool gagner);
 
 #endif

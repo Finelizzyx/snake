@@ -21,15 +21,29 @@ int main (int argc, char *argv[])
 	tempsActuel = 0;
 	tempsPrecedent = 0;
 	niveauActuel = 1;
+	pause = SDL_FALSE;
+	gagner = SDL_FALSE;
 
     srand(time(NULL));
 
 	/* Initialisation de la SDL. */
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        fprintf(stderr, "Impossible d'initialiser SDL2 : %s\n", SDL_GetError());
         return EXIT_FAILURE;
+    }
+
+    /* Initialisation de SDL_ttf */
+    /*
+    if (TTF_Init() < 0)
+    {
+        fprintf(stderr, "Impossible d'initialiser SDL TTF: %s\n", TTF_GetError());
+        return EXIT_FAILURE;
+    }
+    */
 
 	/* Création de la fenêtre et du renderer */
-	win = SDL_CreateWindow("Snake", 100, 100, WIDTH, HEIGHT, 0);
+	win = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
     snake = initSerpent(renderer);
@@ -68,22 +82,30 @@ int main (int argc, char *argv[])
                         case SDLK_LEFT:
                             snake->direction = GAUCHE;
                             break;
+                        case SDLK_p:
+                            pause = (pause) ? SDL_FALSE : SDL_TRUE;
+                            break;
                     }
             }
 		}
 
         tempsActuel = SDL_GetTicks();
-        if(tempsActuel - tempsPrecedent > INTERVALLE) /* Si 0.2 sec se sont écoulées */
+        if(tempsActuel - tempsPrecedent > INTERVALLE && !pause) /* Si 0.2 sec se sont écoulées */
         {
             deplacerSerpent(snake, renderer);
             afficherSerpent(renderer, snake);
             afficherPoints(renderer, points);
             if(pointsVide(points))
             {
-                if(niveauActuel < MAX_NIVEAUX) /* Il reste des niveaux à faire */
+                if(niveauActuel < MAX_NIVEAUX)
+                /* Il reste des niveaux à faire */
                     chargerPoints(points, ++niveauActuel);
-                else /* On a fini tous les niveaux */
+                else
+                /* On a fini tous les niveaux */
+                {
                     continuer = SDL_FALSE;
+                    gagner = SDL_TRUE;
+                }
             }
             tempsPrecedent = tempsActuel;
         }
