@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1453724838 source:d:\git\snake\snake.c
+1453820068 source:d:\git\snake\snake.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -332,9 +332,10 @@
 	"begin_code.h"
 	"close_code.h"
 
-1453724895 d:\git\snake\snake.h
+1453820068 d:\git\snake\snake.h
 	<SDL.h>
 	<SDL_image.h>
+	<SDL_ttf.h>
 
 1453018710 source:i:\dev\git\snake\snake.c
 	<stdio.h>
@@ -370,7 +371,7 @@
 	<SDL_image.h>
 	"snake.h"
 
-1453401532 source:d:\git\snake\affiche.c
+1453819730 source:d:\git\snake\affiche.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -382,7 +383,7 @@
 	<stdio.h>
 	"snake.h"
 
-1453724796 source:d:\git\snake\serpent.c
+1453816666 source:d:\git\snake\serpent.c
 	<stdlib.h>
 	<stdio.h>
 	<time.h>
@@ -390,11 +391,16 @@
 	<SDL_image.h>
 	"snake.h"
 
-1453400795 source:d:\git\snake\points.c
+1453816666 source:d:\git\snake\points.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	<SDL.h>
 	<SDL_image.h>
 	"snake.h"
+
+1451809144 c:\program files (x86)\codeblocks\sdl2_ttf-2.0.13\i686-w64-mingw32\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
 

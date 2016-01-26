@@ -1,11 +1,13 @@
-/* #########################################
+/** #########################################
 Fichier d'en tête commun à tous les fichiers
-############################################ */
+############################################
+*/
 #ifndef SNAKE_H_INCLUDED
 #define SNAKE_H_INCLUDED
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -70,6 +72,7 @@ EXTERN int tempsPrecedent;
 EXTERN int niveauActuel;
 EXTERN SDL_bool pause;
 EXTERN SDL_bool gagner;
+EXTERN TTF_Font *police;
 
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
@@ -91,7 +94,10 @@ void libererPoints(Points *points);
 SDL_bool collisionPoint(Snake *snake, Points *points);
 SDL_bool collisionSerpent(Snake *snake);
 
+void init(void);
+void quit(void);
 void snakeERROR(const char *erreur);
+void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b);
 void terminer(SDL_bool gagner);
 
 #endif

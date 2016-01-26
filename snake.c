@@ -1,6 +1,7 @@
-/* #########################################
+/** #########################################
 Fonction main
-############################################ */
+############################################
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -27,24 +28,18 @@ int main (int argc, char *argv[])
     srand(time(NULL));
 
 	/* Initialisation de la SDL. */
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        fprintf(stderr, "Impossible d'initialiser SDL2 : %s\n", SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    /* Initialisation de SDL_ttf */
-    /*
-    if (TTF_Init() < 0)
-    {
-        fprintf(stderr, "Impossible d'initialiser SDL TTF: %s\n", TTF_GetError());
-        return EXIT_FAILURE;
-    }
-    */
+	init();
 
 	/* Création de la fenêtre et du renderer */
 	win = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+
+	/* Création de la police */
+	if((police = TTF_OpenFont("data/arial.ttf", 14)) == NULL)
+    {
+        fprintf(stderr, "Impossible d'ouvrir le fichier data/arial.ttf : %s\n", TTF_GetError());
+        return EXIT_FAILURE;
+    }
 
     snake = initSerpent(renderer);
     ajouterSerpent(snake, renderer);
@@ -84,6 +79,7 @@ int main (int argc, char *argv[])
                             break;
                         case SDLK_p:
                             pause = (pause) ? SDL_FALSE : SDL_TRUE;
+                            afficherTexte(renderer, "PAUSE", police, 400, 300, 255, 255, 255);
                             break;
                     }
             }
@@ -97,26 +93,22 @@ int main (int argc, char *argv[])
             afficherPoints(renderer, points);
             if(pointsVide(points))
             {
-                if(niveauActuel < MAX_NIVEAUX)
                 /* Il reste des niveaux à faire */
+                if(niveauActuel < MAX_NIVEAUX)
                     chargerPoints(points, ++niveauActuel);
-                else
                 /* On a fini tous les niveaux */
+                else
                 {
                     continuer = SDL_FALSE;
                     gagner = SDL_TRUE;
+                    afficherTexte(renderer, "Gagné !", police, 400, 300, 255, 255, 255);
                 }
             }
             tempsPrecedent = tempsActuel;
         }
 	}
 
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(win);
-    libererSerpent(snake);
-    libererPoints(points);
-
-    SDL_Quit();
+	quit();
 
 	return EXIT_SUCCESS;
 }
