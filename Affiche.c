@@ -45,7 +45,6 @@ void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, 
     SDL_Rect rect;
     SDL_Color couleur;
     SDL_Color noir = {0, 0, 0, 255};
-    char erreur[128];
 
     /* couleur du texte */
     couleur.r = r;
@@ -68,8 +67,5 @@ void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, 
         SDL_DestroyTexture(texteTexture);
     }
     else
-    {
-        sprintf(erreur, "Le texte %s n'a pas pu être afficher : %s\n", texte, TTF_GetError());
-        snakeERROR(erreur);
-    }
+        snakeERROR("Le texte %s n'a pas pu être afficher : %s\n", texte, TTF_GetError());
 }

@@ -36,10 +36,7 @@ int main (int argc, char *argv[])
 
 	/* Création de la police */
 	if((police = TTF_OpenFont("data/arial.ttf", 14)) == NULL)
-    {
-        fprintf(stderr, "Impossible d'ouvrir le fichier data/arial.ttf : %s\n", TTF_GetError());
-        return EXIT_FAILURE;
-    }
+        snakeERROR("Impossible d'ouvrir le fichier data/arial.ttf : %s\n", TTF_GetError());
 
     snake = initSerpent(renderer);
     ajouterSerpent(snake, renderer);

@@ -27,7 +27,6 @@ void chargerPoints(Points *points, int niveau)
 {
     FILE *f;
     int x, y;
-    char erreur[128];
     char chemin[20] = "";
 
     sprintf(chemin, "data/niveau%d.dat", niveau);
@@ -36,10 +35,8 @@ void chargerPoints(Points *points, int niveau)
         while((fscanf(f, "%d,%d", &x, &y)) != EOF)
             ajouterPoint(points, renderer, x, y);
     else
-    {
-        sprintf(erreur, "Impossible d'ouvrir le fichier %s !", chemin);
-        snakeERROR(erreur);
-    }
+        snakeERROR("Impossible d'ouvrir le fichier %s !", chemin);
+
     fclose(f);
 }
 

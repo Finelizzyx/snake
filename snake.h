@@ -96,7 +96,7 @@ SDL_bool collisionSerpent(Snake *snake);
 
 void init(void);
 void quit(void);
-void snakeERROR(const char *erreur);
+void snakeERROR(const char *erreur, ...);
 void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b);
 void terminer(SDL_bool gagner);
 
