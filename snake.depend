@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1453820068 source:d:\git\snake\snake.c
+1454151436 source:d:\git\snake\snake.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -332,7 +332,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1453892134 d:\git\snake\snake.h
+1454150749 d:\git\snake\snake.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -371,19 +371,21 @@
 	<SDL_image.h>
 	"snake.h"
 
-1453819730 source:d:\git\snake\affiche.c
+1454150724 source:d:\git\snake\affiche.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
 	<SDL_image.h>
 	"snake.h"
 
-1453724879 source:d:\git\snake\fonctions.c
+1454151995 source:d:\git\snake\fonctions.c
 	<stdlib.h>
 	<stdio.h>
+	<stdarg.h>
+	<string.h>
 	"snake.h"
 
-1453816666 source:d:\git\snake\serpent.c
+1454151836 source:d:\git\snake\serpent.c
 	<stdlib.h>
 	<stdio.h>
 	<time.h>
@@ -391,7 +393,7 @@
 	<SDL_image.h>
 	"snake.h"
 
-1453816666 source:d:\git\snake\points.c
+1453893411 source:d:\git\snake\points.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>

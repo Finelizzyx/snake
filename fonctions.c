@@ -26,8 +26,8 @@ void quit(void)
 {
     SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(win);
-    libererSerpent(snake);
     libererPoints(points);
+    libererSerpent(snake);
     TTF_CloseFont(police);
 
     TTF_Quit();

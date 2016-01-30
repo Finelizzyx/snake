@@ -38,7 +38,7 @@ void afficherPoints(SDL_Renderer *renderer, Points *points)
     }
 }
 
-void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b)
+SDL_Rect afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b)
 {
     SDL_Surface *texteSurface = NULL;
     SDL_Texture *texteTexture = NULL;
@@ -62,10 +62,12 @@ void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, 
         rect.y = y;
 
         SDL_QueryTexture(texteTexture, NULL, NULL, &rect.w, &rect.h);
-        SDL_RenderCopy(renderer, texteTexture, NULL, &rect);
+        afficherImage(renderer, texteTexture, &rect);
 
         SDL_DestroyTexture(texteTexture);
     }
     else
         snakeERROR("Le texte %s n'a pas pu être afficher : %s\n", texte, TTF_GetError());
+
+    return rect;
 }

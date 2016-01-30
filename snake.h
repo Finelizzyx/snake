@@ -73,11 +73,13 @@ EXTERN int niveauActuel;
 EXTERN SDL_bool pause;
 EXTERN SDL_bool gagner;
 EXTERN TTF_Font *police;
+EXTERN SDL_Rect rectPause;
 
 
 void afficherImage(SDL_Renderer *renderer, SDL_Texture *img, SDL_Rect *r);
 void afficherSerpent(SDL_Renderer *renderer, Snake *snake);
 void afficherPoints(SDL_Renderer *renderer, Points *points);
+SDL_Rect afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b);
 
 Snake* initSerpent(SDL_Renderer *renderer);
 void deplacerSerpent(Snake *snake, SDL_Renderer *renderer);
@@ -97,7 +99,6 @@ SDL_bool collisionSerpent(Snake *snake);
 void init(void);
 void quit(void);
 void snakeERROR(const char *erreur, ...);
-void afficherTexte(SDL_Renderer *renderer, const char *texte, TTF_Font *police, int x, int y, int r, int g, int b);
 void terminer(SDL_bool gagner);
 
 #endif

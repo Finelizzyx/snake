@@ -19,6 +19,7 @@ int main (int argc, char *argv[])
 	renderer = NULL;
 	continuer = SDL_TRUE;
 	snake = NULL;
+	points = NULL;
 	tempsActuel = 0;
 	tempsPrecedent = 0;
 	niveauActuel = 1;
@@ -37,6 +38,7 @@ int main (int argc, char *argv[])
 	/* Création de la police */
 	if((police = TTF_OpenFont("data/arial.ttf", 14)) == NULL)
         snakeERROR("Impossible d'ouvrir le fichier data/arial.ttf : %s\n", TTF_GetError());
+
 
     snake = initSerpent(renderer);
     ajouterSerpent(snake, renderer);
@@ -75,8 +77,16 @@ int main (int argc, char *argv[])
                             snake->direction = GAUCHE;
                             break;
                         case SDLK_p:
-                            pause = (pause) ? SDL_FALSE : SDL_TRUE;
-                            afficherTexte(renderer, "PAUSE", police, 400, 300, 255, 255, 255);
+                            if(pause)
+                            {
+                                pause = SDL_FALSE;
+                                SDL_RenderFillRect(renderer, &rectPause);
+                            }
+                            else
+                            {
+                                pause = SDL_TRUE;
+                                rectPause = afficherTexte(renderer, "PAUSE", police, 400, 300, 255, 255, 255);
+                            }
                             break;
                     }
             }
